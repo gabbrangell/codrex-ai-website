@@ -42,6 +42,7 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
+    "build:vercel": "tsc -p tsconfig.app.json && vite build",
     "cf-typegen": "wrangler types",
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "dev": "vite",
