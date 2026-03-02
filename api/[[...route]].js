@@ -42,7 +42,7 @@ const PRICING_PLANS = {
     priceCents: 5900,
     interval: "month",
     intervalCount: 1,
-    stripePriceId: "", // Add from Stripe Dashboard: price_xxxxx
+    stripePriceId: "price_1T6a5CD7sUDxheOfaLUYDSwD",
     features: ["Unlimited mock interviews", "Real-time coaching", "All AI models", "Priority Support"],
   },
   quarterly: {
@@ -50,7 +50,7 @@ const PRICING_PLANS = {
     priceCents: 19900,
     interval: "month",
     intervalCount: 3,
-    stripePriceId: "", // Add from Stripe Dashboard: price_xxxxx
+    stripePriceId: "price_1T6a5fD7sUDxheOfPc6sEyKT",
     features: ["Everything in Monthly", "Billed every 3 months", "Save ~$22"],
   },
   annual: {
@@ -58,21 +58,11 @@ const PRICING_PLANS = {
     priceCents: 49900,
     interval: "year",
     intervalCount: 1,
-    stripePriceId: "", // Add from Stripe Dashboard: price_xxxxx
+    stripePriceId: "price_1T6a67D7sUDxheOfOe4yh0No",
     features: ["Everything in Monthly", "Billed annually", "VIP Support", "Save ~$209"],
   },
 };
 
-function generateLicenseKey() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const parts = [];
-  for (let i = 0; i < 4; i++) {
-    let s = "";
-    for (let j = 0; j < 4; j++) s += chars[Math.floor(Math.random() * chars.length)];
-    parts.push(s);
-  }
-  return parts.join("-");
-}
 
 const app = new Hono().basePath("/api");
 
