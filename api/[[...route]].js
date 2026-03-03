@@ -178,7 +178,7 @@ app.post("/licenses/:id/reset-hardware", authMiddleware, async (c) => {
 
   const { data: license } = await supabase
     .from("license_keys")
-    .select("id, license_key, stripe_session_id")
+    .select("id, license_key, stripe_session_id, last_hardware_reset_at")
     .eq("id", id)
     .single();
 
@@ -189,6 +189,15 @@ app.post("/licenses/:id/reset-hardware", authMiddleware, async (c) => {
     return c.json({ error: "Not found" }, 404);
   }
 
+  // Enforce 30-day cooldown between hardware resets
+  if (license.last_hardware_reset_at) {
+    const daysSince = (Date.now() - new Date(license.last_hardware_reset_at).getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSince < 30) {
+      const daysLeft = Math.ceil(30 - daysSince);
+      return c.json({ error: `Hardware reset available in ${daysLeft} day(s)` }, 429);
+    }
+  }
+
   // Delete from license_activations — this is what actually allows re-activation on a new machine
   const { error } = await supabase
     .from("license_activations")
@@ -196,6 +205,13 @@ app.post("/licenses/:id/reset-hardware", authMiddleware, async (c) => {
     .eq("license_key", license.license_key);
 
   if (error) return c.json({ error: "Failed to reset" }, 500);
+
+  // Record the reset time for cooldown enforcement
+  await supabase
+    .from("license_keys")
+    .update({ last_hardware_reset_at: new Date().toISOString() })
+    .eq("id", id);
+
   return c.json({ success: true });
 });
 
@@ -205,6 +221,23 @@ app.post("/checkout", authMiddleware, async (c) => {
   const { plan } = await c.req.json();
   const planConfig = PRICING_PLANS[plan];
   if (!planConfig) return c.json({ error: "Invalid plan" }, 400);
+
+  const supabase = getSupabase();
+
+  // Rate limit: max 3 checkout attempts per user per hour
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count } = await supabase
+    .from("checkout_attempts")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .gte("attempted_at", oneHourAgo);
+
+  if (count >= 3) {
+    return c.json({ error: "Too many checkout attempts. Try again in an hour." }, 429);
+  }
+
+  // Record this attempt before creating the Stripe session
+  await supabase.from("checkout_attempts").insert({ user_id: user.id });
 
   const stripe = getStripe();
   const origin = c.req.header("origin") ?? "https://codrexai.com";
