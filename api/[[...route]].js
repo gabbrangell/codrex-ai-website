@@ -15,8 +15,9 @@ const PRICING_PLANS = {
   annual:    { name: "Annual",    priceId: "price_1T6a67D7sUDxheOfOe4yh0No" },
 };
 
-// CORS — only allow requests from our own domain
-app.use("/api/*", cors({
+// CORS — only allow requests from our own domain.
+// NOTE: with basePath("/api"), paths here are relative to /api, so "/*" means all routes.
+app.use("/*", cors({
   origin: (origin) => {
     const allowed = [
       "https://codrexai.com",
@@ -78,12 +79,22 @@ app.get("/dashboard/stats", authMiddleware, async (c) => {
 
   const { data: licenses } = await supabase
     .from("license_keys")
-    .select("status, is_hardware_locked")
+    .select("license_key, status")
     .in("stripe_session_id", sessionIds);
 
-  const activeLicenses = licenses?.filter((l) => l.status === "active").length ?? 0;
-  const hardwareLocked = licenses?.filter((l) => l.is_hardware_locked).length ?? 0;
-  const totalLicenses = licenses?.length ?? 0;
+  if (!licenses?.length) {
+    return c.json({ activeLicenses: 0, hardwareLocked: 0, totalLicenses: 0, securityStatus: "Standard" });
+  }
+
+  // Hardware lock count comes from license_activations (the real source of truth)
+  const { data: activations } = await supabase
+    .from("license_activations")
+    .select("license_key")
+    .in("license_key", licenses.map((l) => l.license_key));
+
+  const activeLicenses = licenses.filter((l) => l.status === "active").length;
+  const hardwareLocked = activations?.length ?? 0;
+  const totalLicenses = licenses.length;
 
   return c.json({
     activeLicenses,
@@ -106,7 +117,23 @@ app.get("/licenses", authMiddleware, async (c) => {
     .select("*")
     .in("stripe_session_id", sessionIds);
 
-  return c.json(licenses ?? []);
+  if (!licenses?.length) return c.json([]);
+
+  // Join hardware info from license_activations
+  const { data: activations } = await supabase
+    .from("license_activations")
+    .select("license_key, hardware_fingerprint")
+    .in("license_key", licenses.map((l) => l.license_key));
+
+  const activationMap = new Map(
+    activations?.map((a) => [a.license_key, a.hardware_fingerprint]) ?? []
+  );
+
+  return c.json(licenses.map((l) => ({
+    ...l,
+    hardware_id: activationMap.get(l.license_key) ?? null,
+    is_hardware_locked: activationMap.has(l.license_key) ? 1 : 0,
+  })));
 });
 
 // GET /api/licenses/:id
@@ -129,7 +156,18 @@ app.get("/licenses/:id", authMiddleware, async (c) => {
     return c.json({ error: "Not found" }, 404);
   }
 
-  return c.json(license);
+  // Join hardware info from license_activations
+  const { data: activation } = await supabase
+    .from("license_activations")
+    .select("hardware_fingerprint")
+    .eq("license_key", license.license_key)
+    .maybeSingle();
+
+  return c.json({
+    ...license,
+    hardware_id: activation?.hardware_fingerprint ?? null,
+    is_hardware_locked: activation ? 1 : 0,
+  });
 });
 
 // POST /api/licenses/:id/reset-hardware
@@ -140,7 +178,7 @@ app.post("/licenses/:id/reset-hardware", authMiddleware, async (c) => {
 
   const { data: license } = await supabase
     .from("license_keys")
-    .select("id, stripe_session_id")
+    .select("id, license_key, stripe_session_id")
     .eq("id", id)
     .single();
 
@@ -151,10 +189,11 @@ app.post("/licenses/:id/reset-hardware", authMiddleware, async (c) => {
     return c.json({ error: "Not found" }, 404);
   }
 
+  // Delete from license_activations — this is what actually allows re-activation on a new machine
   const { error } = await supabase
-    .from("license_keys")
-    .update({ hardware_id: null, is_hardware_locked: false })
-    .eq("id", id);
+    .from("license_activations")
+    .delete()
+    .eq("license_key", license.license_key);
 
   if (error) return c.json({ error: "Failed to reset" }, 500);
   return c.json({ success: true });
