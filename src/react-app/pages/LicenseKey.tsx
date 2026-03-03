@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router";
-import { useAuth } from "@getmocha/users-service/react";
+import { useAuth } from "@/react-app/contexts/AuthContext";
+import { apiFetch } from "@/react-app/lib/api";
 import Header from "@/react-app/components/Header";
 import { Button } from "@/react-app/components/ui/button";
 import { Badge } from "@/react-app/components/ui/badge";
@@ -59,7 +60,7 @@ export default function LicenseKeyPage() {
 
   const fetchLicense = async () => {
     try {
-      const res = await fetch(`/api/licenses/${id}`);
+      const res = await apiFetch(`/api/licenses/${id}`);
       if (res.ok) {
         setLicense(await res.json());
       } else {
@@ -86,7 +87,7 @@ export default function LicenseKeyPage() {
     
     setIsResetting(true);
     try {
-      const res = await fetch(`/api/licenses/${license.id}/reset-hardware`, {
+      const res = await apiFetch(`/api/licenses/${license.id}/reset-hardware`, {
         method: "POST",
       });
       if (res.ok) {

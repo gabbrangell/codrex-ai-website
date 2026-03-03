@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
-import { useAuth } from "@getmocha/users-service/react";
+import { useAuth } from "@/react-app/contexts/AuthContext";
+import { apiFetch } from "@/react-app/lib/api";
 import Header from "@/react-app/components/Header";
 import { Button } from "@/react-app/components/ui/button";
 import {
@@ -64,8 +65,8 @@ export default function DashboardPage() {
   const fetchData = async () => {
     try {
       const [statsRes, licensesRes] = await Promise.all([
-        fetch("/api/dashboard/stats"),
-        fetch("/api/licenses"),
+        apiFetch("/api/dashboard/stats"),
+        apiFetch("/api/licenses"),
       ]);
 
       if (statsRes.ok) {
@@ -83,7 +84,7 @@ export default function DashboardPage() {
 
   const handleCreateLicense = async () => {
     try {
-      const res = await fetch("/api/licenses", {
+      const res = await apiFetch("/api/licenses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: "Professional" }),
@@ -155,7 +156,7 @@ export default function DashboardPage() {
             <div>
               <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
               <p className="text-muted-foreground">
-                Welcome back, {user.google_user_data?.given_name || user.email}
+                Welcome back, {user.user_metadata?.full_name || user.email}
               </p>
             </div>
             <div className="flex items-center gap-3">

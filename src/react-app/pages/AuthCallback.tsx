@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "@getmocha/users-service/react";
+import { supabase } from "@/react-app/lib/supabase";
 import { Zap, AlertCircle } from "lucide-react";
 import { Button } from "@/react-app/components/ui/button";
 
 export default function AuthCallbackPage() {
-  const { exchangeCodeForSessionToken } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        await exchangeCodeForSessionToken();
+        const { error } = await supabase.auth.exchangeCodeForSession(window.location.search);
+        if (error) throw error;
         navigate("/dashboard");
       } catch (err) {
         console.error("Auth callback error:", err);
@@ -21,7 +21,7 @@ export default function AuthCallbackPage() {
     };
 
     handleCallback();
-  }, [exchangeCodeForSessionToken, navigate]);
+  }, [navigate]);
 
   if (error) {
     return (

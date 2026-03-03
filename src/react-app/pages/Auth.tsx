@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "@getmocha/users-service/react";
+import { useAuth } from "@/react-app/contexts/AuthContext";
 import { Button } from "@/react-app/components/ui/button";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
