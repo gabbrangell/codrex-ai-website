@@ -23,7 +23,7 @@ const PRICING_PLANS = {
     priceCents: 5900, // $59
     interval: "month" as const,
     intervalCount: 1,
-    stripePriceId: "", // Add your Stripe Price ID: price_xxxxx
+    stripePriceId: "price_1T6a5CD7sUDxheOfaLUYDSwD",
     features: ["Unlimited mock interviews", "Real-time coaching", "All AI models", "Priority Support"],
   },
   quarterly: {
@@ -31,7 +31,7 @@ const PRICING_PLANS = {
     priceCents: 19900, // $199
     interval: "month" as const,
     intervalCount: 3,
-    stripePriceId: "", // Add your Stripe Price ID: price_xxxxx
+    stripePriceId: "price_1T6a5fD7sUDxheOfPc6sEyKT",
     features: ["Everything in Monthly", "Billed every 3 months", "Save ~$22"],
   },
   annual: {
@@ -39,7 +39,7 @@ const PRICING_PLANS = {
     priceCents: 49900, // $499
     interval: "year" as const,
     intervalCount: 1,
-    stripePriceId: "", // Add your Stripe Price ID: price_xxxxx
+    stripePriceId: "price_1T6a67D7sUDxheOfOe4yh0No",
     features: ["Everything in Monthly", "Billed annually", "VIP Support", "Save ~$209"],
   },
 };
