@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "@getmocha/users-service/react";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
 import { Button } from "@/react-app/components/ui/button";
@@ -77,7 +76,7 @@ const supportOptions = [
 ];
 
 export default function ClientAccessPage() {
-  const { user, redirectToLogin } = useAuth();
+  const user = null;
   const navigate = useNavigate();
   const [licenseKey, setLicenseKey] = useState("");
   const [verifying, setVerifying] = useState(false);
@@ -116,11 +115,7 @@ export default function ClientAccessPage() {
   };
 
   const handleGoToDashboard = async () => {
-    if (!user) {
-      await redirectToLogin();
-    } else {
-      navigate("/dashboard");
-    }
+    navigate("/pricing");
   };
 
   return (

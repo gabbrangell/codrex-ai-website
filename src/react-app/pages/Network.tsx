@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "@getmocha/users-service/react";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
 import { Button } from "@/react-app/components/ui/button";
@@ -105,14 +104,12 @@ const stats = [
 ];
 
 export default function NetworkPage() {
-  const { user, redirectToLogin } = useAuth();
+  const user = null;
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  // Generate a demo referral link based on user
-  const referralCode = user ? `REF${user.id.slice(0, 8).toUpperCase()}` : "DEMO123";
-  const referralLink = `https://apexai.com/r/${referralCode}`;
+  const referralLink = `https://codrexai.com/r/DEMO123`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralLink);
@@ -122,11 +119,6 @@ export default function NetworkPage() {
 
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      await redirectToLogin();
-      return;
-    }
-    // Demo submission
     setSubmitted(true);
   };
 
