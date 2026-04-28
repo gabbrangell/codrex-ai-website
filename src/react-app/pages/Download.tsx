@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
 import { Button } from "@/react-app/components/ui/button";
@@ -77,8 +78,9 @@ const features = [
 ];
 
 export default function DownloadPage() {
+  const navigate = useNavigate();
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>("windows");
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading] = useState(false);
 
   // Detect user's platform
   useEffect(() => {
@@ -93,13 +95,8 @@ export default function DownloadPage() {
   const platform = platformData[selectedPlatform];
 
   const handleDownload = () => {
-    setIsDownloading(true);
-    // Simulate download start
-    setTimeout(() => {
-      setIsDownloading(false);
-      // In production, this would trigger the actual download
-      alert(`Download started: ${platform.filename}\n\nNote: This is a demo. In production, this would download the actual installer.`);
-    }, 1500);
+    // Redirect to pricing — user must purchase before downloading
+    navigate("/pricing");
   };
 
   return (
