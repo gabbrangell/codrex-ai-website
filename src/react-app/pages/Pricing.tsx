@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
-import { useAuth } from "@/react-app/contexts/AuthContext";
-import { apiFetch } from "@/react-app/lib/api";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
 import { Button } from "@/react-app/components/ui/button";
@@ -71,30 +69,25 @@ const plans = [
   },
 ];
 
+const BACKEND = "https://codrex-ai-production.up.railway.app";
+
 export default function PricingPage() {
-  const { user, redirectToLogin } = useAuth();
-  
   const [searchParams] = useSearchParams();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const paymentCancelled = searchParams.get("payment") === "cancelled";
 
   const handlePurchase = async (planId: string) => {
-    if (!user) {
-      await redirectToLogin();
-      return;
-    }
-
     setLoadingPlan(planId);
     try {
-      const res = await apiFetch("/api/checkout", {
+      const res = await fetch(`${BACKEND}/stripe/create-checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: planId }),
       });
 
       const data = await res.json();
-      if (data.url) {
+      if (data.url && data.url.startsWith("https://checkout.stripe.com")) {
         window.location.href = data.url;
       }
     } catch (error) {
