@@ -4,7 +4,7 @@ import { useAuth } from "@/react-app/contexts/AuthContext";
 import { Button } from "@/react-app/components/ui/button";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
-import { Zap, Shield, Sparkles, ArrowRight } from "lucide-react";
+import { Shield, Sparkles, ArrowRight } from "lucide-react";
 
 export default function AuthPage() {
   const { user, isPending, redirectToLogin } = useAuth();
@@ -32,11 +32,18 @@ export default function AuthPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-32">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="flex justify-center mb-8">
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-cyan-400 shadow-lg shadow-primary/25">
-              <Zap className="h-8 w-8 text-background" />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-cyan-400 opacity-50 blur-xl" />
+          <div className="flex flex-col items-center gap-2 mb-8">
+            <div className="relative">
+              <img
+                src="https://019c7654-4730-764c-8284-efa1d6013897.mochausercontent.com/codrex-logo-flat-cyan.png"
+                alt="Codrex AI Logo"
+                className="h-14 w-14 rounded-xl shadow-lg shadow-primary/25"
+              />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary to-cyan-400 opacity-0 blur-md" />
             </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
+              Codrex AI
+            </span>
           </div>
 
           {/* Title */}
