@@ -42,10 +42,13 @@ export default function AuthPage() {
           {/* Title */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              Welcome to Codrex AI
+              Sign in to{" "}
+              <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
+                Codrex AI
+              </span>
             </h1>
             <p className="text-muted-foreground">
-              Sign in to access your interview coaching dashboard
+              Access your license, downloads and account settings
             </p>
           </div>
 
