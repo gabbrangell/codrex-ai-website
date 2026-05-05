@@ -13,20 +13,22 @@ export default function ActivatePage() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const sessionId = searchParams.get("session_id");
+  const sessionId = searchParams.get("session");
 
   useEffect(() => {
-    if (!sessionId) {
-      setLoading(false);
-      return;
-    }
-    fetch(`${BACKEND}/api/activate?session_id=${sessionId}`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.licenseKey) setLicenseKey(data.licenseKey);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    if (!sessionId) { setLoading(false); return; }
+    let attempts = 0;
+    const tryFetch = () => {
+      fetch(`${BACKEND}/api/activate?session=${sessionId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.licenseKey) { setLicenseKey(data.licenseKey); setLoading(false); }
+          else if (attempts < 5) { attempts++; setTimeout(tryFetch, 3000); }
+          else setLoading(false);
+        })
+        .catch(() => { if (attempts < 5) { attempts++; setTimeout(tryFetch, 3000); } else setLoading(false); });
+    };
+    tryFetch();
   }, [sessionId]);
 
   function copyKey() {
