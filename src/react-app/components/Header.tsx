@@ -57,7 +57,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/auth">
+          <Link to="/client-access">
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -104,7 +104,7 @@ export default function Header() {
               )
             ))}
             <div className="flex flex-col gap-2 pt-4 border-t border-border/50 mt-2">
-              <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/client-access" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="ghost" className="w-full justify-center">
                   Sign In
                 </Button>

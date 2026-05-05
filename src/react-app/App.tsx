@@ -14,6 +14,7 @@ import ContactPage from "@/react-app/pages/Contact";
 import TermsPage from "@/react-app/pages/Terms";
 import PrivacyPage from "@/react-app/pages/Privacy";
 import EULAPage from "@/react-app/pages/EULA";
+import ActivatePage from "@/react-app/pages/Activate";
 import AIChatWidget from "@/react-app/components/AIChatWidget";
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/eula" element={<EULAPage />} />
+          <Route path="/activate" element={<ActivatePage />} />
         </Routes>
         <AIChatWidget />
       </Router>
