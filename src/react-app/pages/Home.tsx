@@ -358,20 +358,20 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Link to="/download">
+                <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Runtime.Broker_1.0.0_aarch64.dmg">
                   <Button size="lg" className="h-12 px-6 bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 group w-full sm:w-auto">
                     <Apple className="mr-2 h-5 w-5" />
                     Download for macOS
                   </Button>
-                </Link>
-                <Link to="/download">
+                </a>
+                <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Runtime.Broker_1.0.0_x64-setup.exe">
                   <Button size="lg" variant="outline" className="h-12 px-6 w-full sm:w-auto">
                     <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M3 5.548l7.062-0.96v6.817h-7.062v-5.857zM3 18.452l7.062 0.96v-6.695h-7.062v5.735zM10.906 19.548l10.094 1.452v-8.283h-10.094v6.831zM10.906 4.452v6.831h10.094v-8.283l-10.094 1.452z"/>
                     </svg>
                     Download for Windows
                   </Button>
-                </Link>
+                </a>
               </div>
 
               <div className="text-sm text-muted-foreground">
