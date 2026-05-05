@@ -334,7 +334,7 @@ export default function HomePage() {
           <div className="relative aspect-video rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
             <iframe
               className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/rCAG7-Jx1vs?rel=0&modestbranding=1"
+              src="https://www.youtube.com/embed/rCAG7-Jx1vs?rel=0&modestbranding=1&vq=hd1080"
               title="Codrex AI Demo"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
