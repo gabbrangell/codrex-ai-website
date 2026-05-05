@@ -37,8 +37,8 @@ const platformData = {
     icon: Apple,
     version: "1.0.0",
     size: "~80 MB",
-    filename: "Runtime.Broker_1.0.0_aarch64.dmg",
-    downloadUrl: `${RELEASE}/Runtime.Broker_1.0.0_aarch64.dmg`,
+    filename: "Codrex AI_1.0.0_aarch64.dmg",
+    downloadUrl: `${RELEASE}/Codrex AI_1.0.0_aarch64.dmg`,
     requirements: [
       { icon: Cpu, text: "Apple Silicon or Intel Mac" },
       { icon: Monitor, text: "macOS 12.0 Monterey or later" },
@@ -51,8 +51,8 @@ const platformData = {
     icon: WindowsIcon,
     version: "1.0.0",
     size: "~90 MB",
-    filename: "Runtime.Broker_1.0.0_x64-setup.exe",
-    downloadUrl: `${RELEASE}/Runtime.Broker_1.0.0_x64-setup.exe`,
+    filename: "Codrex AI_1.0.0_x64-setup.exe",
+    downloadUrl: `${RELEASE}/Codrex AI_1.0.0_x64-setup.exe`,
     requirements: [
       { icon: Cpu, text: "64-bit processor" },
       { icon: Monitor, text: "Windows 10/11 (64-bit)" },

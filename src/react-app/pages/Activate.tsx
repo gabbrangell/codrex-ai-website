@@ -86,13 +86,13 @@ export default function ActivatePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Runtime.Broker_1.0.0_aarch64.dmg">
+            <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Codrex AI_1.0.0_aarch64.dmg">
               <Button className="w-full sm:w-auto bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90">
                 <Apple className="mr-2 h-4 w-4" />
                 Download for macOS
               </Button>
             </a>
-            <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Runtime.Broker_1.0.0_x64-setup.exe">
+            <a href="https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0/Codrex AI_1.0.0_x64-setup.exe">
               <Button variant="outline" className="w-full sm:w-auto">
                 <Download className="mr-2 h-4 w-4" />
                 Download for Windows
