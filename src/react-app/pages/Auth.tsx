@@ -32,18 +32,12 @@ export default function AuthPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-32">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="flex flex-col items-center gap-2 mb-8">
-            <div className="relative">
-              <img
-                src="https://019c7654-4730-764c-8284-efa1d6013897.mochausercontent.com/codrex-logo-flat-cyan.png"
-                alt="Codrex AI Logo"
-                className="h-14 w-14 rounded-xl shadow-lg shadow-primary/25"
-              />
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary to-cyan-400 opacity-0 blur-md" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-              Codrex AI
-            </span>
+          <div className="flex justify-center mb-8">
+            <img
+              src="https://019c7654-4730-764c-8284-efa1d6013897.mochausercontent.com/codrex-logo-flat-cyan.png"
+              alt="Codrex AI Logo"
+              className="h-16 w-16 rounded-2xl shadow-lg shadow-primary/25"
+            />
           </div>
 
           {/* Title */}
