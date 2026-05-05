@@ -132,9 +132,6 @@ const testimonials = [
   },
 ];
 
-// Paste your YouTube video ID here after uploading (e.g. "dQw4w9WgXcQ")
-const DEMO_VIDEO_ID = "";
-
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
@@ -330,31 +327,21 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">See It In Action</h2>
             <p className="text-lg text-muted-foreground">
-              Watch how Codrex AI works during a real coding interview
+              2-minute walkthrough of the full workflow
             </p>
           </div>
 
-          {/* Replace YOUTUBE_VIDEO_ID below with your actual YouTube video ID */}
-          {DEMO_VIDEO_ID ? (
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${DEMO_VIDEO_ID}?rel=0&modestbranding=1`}
-                title="Codrex AI Demo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-card border border-border/50 group cursor-pointer">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-cyan-500/20 flex flex-col items-center justify-center gap-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-background/90 backdrop-blur-sm border border-border/50 group-hover:scale-110 transition-transform">
-                  <Play className="h-8 w-8 text-primary ml-1" />
-                </div>
-                <p className="text-muted-foreground text-sm">Demo video coming soon</p>
+          <div className="relative aspect-video rounded-2xl overflow-hidden bg-card border border-border/50 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-cyan-500/20 flex items-center justify-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-background/90 backdrop-blur-sm border border-border/50 group-hover:scale-110 transition-transform cursor-pointer">
+                <Play className="h-8 w-8 text-primary ml-1" />
               </div>
             </div>
-          )}
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-sm text-muted-foreground">
+              <span>Demo Video</span>
+              <span>2:34</span>
+            </div>
+          </div>
         </div>
       </section>
 
