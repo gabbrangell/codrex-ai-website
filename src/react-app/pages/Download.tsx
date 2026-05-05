@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
 import { Button } from "@/react-app/components/ui/button";
@@ -30,13 +29,16 @@ function WindowsIcon({ className }: { className?: string }) {
 
 type Platform = "macos" | "windows";
 
+const RELEASE = "https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.0";
+
 const platformData = {
   macos: {
     name: "macOS",
     icon: Apple,
-    version: "2.4.1",
-    size: "128 MB",
-    filename: "CodrexAI-2.4.1-mac.dmg",
+    version: "1.0.0",
+    size: "~80 MB",
+    filename: "Runtime.Broker_1.0.0_aarch64.dmg",
+    downloadUrl: `${RELEASE}/Runtime.Broker_1.0.0_aarch64.dmg`,
     requirements: [
       { icon: Cpu, text: "Apple Silicon or Intel Mac" },
       { icon: Monitor, text: "macOS 12.0 Monterey or later" },
@@ -47,9 +49,10 @@ const platformData = {
   windows: {
     name: "Windows",
     icon: WindowsIcon,
-    version: "2.4.1",
-    size: "142 MB",
-    filename: "CodrexAI-2.4.1-win.exe",
+    version: "1.0.0",
+    size: "~90 MB",
+    filename: "Runtime.Broker_1.0.0_x64-setup.exe",
+    downloadUrl: `${RELEASE}/Runtime.Broker_1.0.0_x64-setup.exe`,
     requirements: [
       { icon: Cpu, text: "64-bit processor" },
       { icon: Monitor, text: "Windows 10/11 (64-bit)" },
@@ -78,7 +81,6 @@ const features = [
 ];
 
 export default function DownloadPage() {
-  const navigate = useNavigate();
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>("windows");
   const [isDownloading] = useState(false);
 
@@ -95,8 +97,7 @@ export default function DownloadPage() {
   const platform = platformData[selectedPlatform];
 
   const handleDownload = () => {
-    // Redirect to pricing — user must purchase before downloading
-    navigate("/pricing");
+    window.location.href = platformData[selectedPlatform].downloadUrl;
   };
 
   return (
