@@ -60,18 +60,20 @@ const features = [
 
 const aiModels = [
   {
-    name: "GPT-4o",
+    name: "GPT-5",
     provider: "OpenAI",
     description: "Best for comprehensive technical explanations and system design discussions.",
     badge: "Most Popular",
     speed: "Fast",
+    website: "platform.openai.com",
   },
   {
-    name: "Claude Sonnet 4",
+    name: "Claude Opus 4",
     provider: "Anthropic",
     description: "Excellent for nuanced behavioral questions and detailed code reviews.",
     badge: "Recommended",
     speed: "Fast",
+    website: "console.anthropic.com",
   },
   {
     name: "Gemini 2.5 Pro",
@@ -79,13 +81,15 @@ const aiModels = [
     description: "Great for multi-modal analysis and complex problem-solving scenarios.",
     badge: null,
     speed: "Fast",
+    website: "aistudio.google.com",
   },
   {
-    name: "GPT-o3",
+    name: "GPT-4o",
     provider: "OpenAI",
     description: "Advanced reasoning for complex algorithmic problems and optimization.",
     badge: "Advanced",
-    speed: "Slower",
+    speed: "Fast",
+    website: "platform.openai.com",
   },
 ];
 
@@ -297,10 +301,18 @@ export default function HomePage() {
                 <h3 className="text-lg font-semibold text-foreground mb-1">{model.name}</h3>
                 <p className="text-xs text-muted-foreground mb-3">{model.provider}</p>
                 <p className="text-sm text-muted-foreground mb-4">{model.description}</p>
-                <div className="flex items-center gap-2 text-xs">
+                <div className="flex items-center justify-between text-xs">
                   <span className={`px-2 py-1 rounded-full ${model.speed === 'Fast' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
                     {model.speed}
                   </span>
+                  <a
+                    href={`https://${model.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Get API →
+                  </a>
                 </div>
               </div>
             ))}
