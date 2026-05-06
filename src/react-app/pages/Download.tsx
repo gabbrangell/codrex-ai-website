@@ -29,16 +29,16 @@ function WindowsIcon({ className }: { className?: string }) {
 
 type Platform = "macos" | "windows";
 
-const RELEASE = "https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.2";
+const RELEASE = "https://github.com/gabbrangell/Codrex-AI/releases/download/v1.0.3";
 
 const platformData = {
   macos: {
     name: "macOS",
     icon: Apple,
-    version: "1.0.2",
+    version: "1.0.3",
     size: "~80 MB",
-    filename: "Codrex AI_1.0.2_aarch64.dmg",
-    downloadUrl: `${RELEASE}/Codrex AI_1.0.2_aarch64.dmg`,
+    filename: "Codrex AI_1.0.3_aarch64.dmg",
+    downloadUrl: `${RELEASE}/Codrex AI_1.0.3_aarch64.dmg`,
     requirements: [
       { icon: Cpu, text: "Apple Silicon or Intel Mac" },
       { icon: Monitor, text: "macOS 12.0 Monterey or later" },
@@ -49,10 +49,10 @@ const platformData = {
   windows: {
     name: "Windows",
     icon: WindowsIcon,
-    version: "1.0.2",
+    version: "1.0.3",
     size: "~90 MB",
-    filename: "Codrex AI_1.0.2_x64-setup.exe",
-    downloadUrl: `${RELEASE}/Codrex AI_1.0.2_x64-setup.exe`,
+    filename: "Codrex AI_1.0.3_x64-setup.exe",
+    downloadUrl: `${RELEASE}/Codrex AI_1.0.3_x64-setup.exe`,
     requirements: [
       { icon: Cpu, text: "64-bit processor" },
       { icon: Monitor, text: "Windows 10/11 (64-bit)" },
