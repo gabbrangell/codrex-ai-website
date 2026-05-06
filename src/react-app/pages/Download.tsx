@@ -185,25 +185,16 @@ export default function DownloadPage() {
                 </div>
               </div>
 
-              {/* Download Button */}
-              <Button
-                size="lg"
-                onClick={handleDownload}
-                disabled={isDownloading}
-                className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
-              >
-                {isDownloading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Preparing...
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Download className="h-5 w-5" />
-                    Download Now
-                  </div>
-                )}
-              </Button>
+              {/* Purchase Required */}
+              <a href="/pricing">
+                <Button
+                  size="lg"
+                  className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Get Access
+                </Button>
+              </a>
             </div>
           </div>
 
