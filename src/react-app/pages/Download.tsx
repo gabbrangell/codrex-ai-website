@@ -97,7 +97,10 @@ export default function DownloadPage() {
   const platform = platformData[selectedPlatform];
 
   const handleDownload = () => {
-    window.location.href = platformData[selectedPlatform].downloadUrl;
+    const link = document.createElement("a");
+    link.href = platformData[selectedPlatform].downloadUrl;
+    link.download = platformData[selectedPlatform].filename;
+    link.click();
   };
 
   return (
@@ -185,16 +188,14 @@ export default function DownloadPage() {
                 </div>
               </div>
 
-              {/* Purchase Required */}
-              <a href="/pricing">
-                <Button
-                  size="lg"
-                  className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
-                >
-                  <Download className="h-5 w-5 mr-2" />
-                  Get Access
-                </Button>
-              </a>
+              <Button
+                onClick={handleDownload}
+                size="lg"
+                className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Download for {platform.name}
+              </Button>
             </div>
           </div>
 
