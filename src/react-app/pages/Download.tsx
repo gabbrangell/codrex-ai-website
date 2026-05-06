@@ -82,7 +82,6 @@ const features = [
 
 export default function DownloadPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>("windows");
-  const [isDownloading] = useState(false);
 
   // Detect user's platform
   useEffect(() => {
