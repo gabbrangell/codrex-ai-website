@@ -37,8 +37,8 @@ const platformData = {
     icon: Apple,
     version: "1.0.4",
     size: "~80 MB",
-    filename: "Codrex.AI_1.0.4_aarch64.dmg",
-    downloadUrl: `${STORAGE}/Codrex.AI_1.0.4_aarch64.dmg`,
+    filename: "CodrexAI-2.4.1-mac.dmg",
+    downloadUrl: `${STORAGE}/CodrexAI-2.4.1-mac.dmg`,
     requirements: [
       { icon: Cpu, text: "Apple Silicon or Intel Mac" },
       { icon: Monitor, text: "macOS 12.0 Monterey or later" },
@@ -51,8 +51,8 @@ const platformData = {
     icon: WindowsIcon,
     version: "1.0.4",
     size: "~90 MB",
-    filename: "Codrex.AI_1.0.4_x64-setup.exe",
-    downloadUrl: `${STORAGE}/Codrex.AI_1.0.4_x64-setup.exe`,
+    filename: "CodrexAI-2.4.1-win.exe",
+    downloadUrl: `${STORAGE}/CodrexAI-2.4.1-win.exe`,
     requirements: [
       { icon: Cpu, text: "64-bit processor" },
       { icon: Monitor, text: "Windows 10/11 (64-bit)" },
