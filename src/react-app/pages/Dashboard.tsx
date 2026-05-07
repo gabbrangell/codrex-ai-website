@@ -64,37 +64,16 @@ export default function DashboardPage() {
 
   const fetchData = async () => {
     try {
-      const [statsRes, licensesRes] = await Promise.all([
-        apiFetch("/api/dashboard/stats"),
-        apiFetch("/api/licenses"),
-      ]);
-
-      if (statsRes.ok) {
-        setStats(await statsRes.json());
-      }
-      if (licensesRes.ok) {
-        setLicenses(await licensesRes.json());
+      const res = await apiFetch("/api/dashboard");
+      if (res.ok) {
+        const data = await res.json() as { licenses: License[]; stats: DashboardStats };
+        setStats(data.stats);
+        setLicenses(data.licenses);
       }
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleCreateLicense = async () => {
-    try {
-      const res = await apiFetch("/api/licenses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "Professional" }),
-      });
-
-      if (res.ok) {
-        fetchData();
-      }
-    } catch (error) {
-      console.error("Failed to create license:", error);
     }
   };
 
@@ -206,14 +185,15 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
-              <Button
-                onClick={handleCreateLicense}
-                size="sm"
-                className="gap-2 bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90"
-              >
-                <Plus className="h-4 w-4" />
-                New License
-              </Button>
+              <Link to="/pricing">
+                <Button
+                  size="sm"
+                  className="gap-2 bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90"
+                >
+                  <Plus className="h-4 w-4" />
+                  Get License
+                </Button>
+              </Link>
             </div>
 
             {licenses.length === 0 ? (

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
 import { supabase } from "@/react-app/lib/supabase";
+import { useAuth } from "@/react-app/contexts/AuthContext";
 import { Button } from "@/react-app/components/ui/button";
 import { Input } from "@/react-app/components/ui/input";
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 function GoogleIcon() {
   return (
@@ -28,6 +29,7 @@ type Mode = "signin" | "signup" | "reset";
 
 export default function AuthPage() {
   const navigate = useNavigate();
+  const { user, isPending } = useAuth();
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +38,10 @@ export default function AuthPage() {
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isPending && user) navigate("/dashboard");
+  }, [user, isPending, navigate]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,9 +87,11 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       <Link to="/" className="flex items-center gap-2 mb-10 group">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-cyan-400 shadow-lg shadow-primary/25">
-          <Zap className="h-5 w-5 text-white" />
-        </div>
+        <img
+          src="https://019c7654-4730-764c-8284-efa1d6013897.mochausercontent.com/codrex-logo-flat-cyan.png"
+          alt="Codrex AI"
+          className="h-9 w-9 rounded-lg shadow-lg shadow-primary/25 transition-all group-hover:shadow-primary/40"
+        />
         <span className="text-xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
           Codrex AI
         </span>

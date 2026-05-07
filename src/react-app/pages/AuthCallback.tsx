@@ -12,9 +12,17 @@ export default function AuthCallbackPage() {
     const handleCallback = async () => {
       try {
         const params = new URLSearchParams(window.location.search);
+        const isDesktop = params.get("desktop") === "1";
         const code = params.get("code");
         const tokenHash = params.get("token_hash");
         const type = params.get("type") as "signup" | "recovery" | "email" | null;
+
+        // Desktop app relay: forward the callback URL to the deep link scheme.
+        // The desktop app's onOpenUrl listener picks this up and exchanges the code.
+        if (isDesktop && code) {
+          window.location.href = `codrex-ai://auth/callback?code=${encodeURIComponent(code)}`;
+          return;
+        }
 
         if (code) {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -23,7 +31,6 @@ export default function AuthCallbackPage() {
           const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
           if (error) throw error;
         } else {
-          // Implicit flow — session is in the URL hash, Supabase handles it automatically
           const { data, error } = await supabase.auth.getSession();
           if (error) throw error;
           if (!data.session) throw new Error("No session found");

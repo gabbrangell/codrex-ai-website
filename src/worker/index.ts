@@ -104,38 +104,39 @@ app.get("/api/users/me", authMiddleware, async (c) => {
 });
 
 // Get user's licenses
+// Single endpoint returns licenses + stats — avoids two auth round-trips.
+app.get("/api/dashboard", authMiddleware, async (c) => {
+  const user = c.get("user");
+
+  const { results: licenses } = await c.env.DB.prepare(
+    "SELECT * FROM licenses WHERE user_id = ? ORDER BY created_at DESC"
+  )
+    .bind(user!.id)
+    .all();
+
+  const activeLicenses = licenses.filter((l: any) => l.status === "active").length;
+  const hardwareLocked = licenses.filter((l: any) => l.is_hardware_locked).length;
+
+  return c.json({
+    licenses,
+    stats: {
+      activeLicenses,
+      hardwareLocked,
+      totalLicenses: licenses.length,
+      securityStatus: hardwareLocked > 0 ? "Protected" : "Standard",
+    },
+  });
+});
+
+// Keep individual endpoints for backwards compat
 app.get("/api/licenses", authMiddleware, async (c) => {
   const user = c.get("user");
-  
   const { results } = await c.env.DB.prepare(
     "SELECT * FROM licenses WHERE user_id = ? ORDER BY created_at DESC"
   )
     .bind(user!.id)
     .all();
-  
   return c.json(results);
-});
-
-// Get dashboard stats
-app.get("/api/dashboard/stats", authMiddleware, async (c) => {
-  const user = c.get("user");
-  
-  const { results: licenses } = await c.env.DB.prepare(
-    "SELECT * FROM licenses WHERE user_id = ?"
-  )
-    .bind(user!.id)
-    .all();
-  
-  const activeLicenses = licenses.filter((l: any) => l.status === "active").length;
-  const hardwareLocked = licenses.filter((l: any) => l.is_hardware_locked).length;
-  const totalLicenses = licenses.length;
-  
-  return c.json({
-    activeLicenses,
-    hardwareLocked,
-    totalLicenses,
-    securityStatus: hardwareLocked > 0 ? "Protected" : "Standard",
-  });
 });
 
 // Get single license by ID
