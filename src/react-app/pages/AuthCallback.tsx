@@ -11,8 +11,24 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const { error } = await supabase.auth.exchangeCodeForSession(window.location.search);
-        if (error) throw error;
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+        const tokenHash = params.get("token_hash");
+        const type = params.get("type") as "signup" | "recovery" | "email" | null;
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+        } else if (tokenHash && type) {
+          const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
+          if (error) throw error;
+        } else {
+          // Implicit flow — session is in the URL hash, Supabase handles it automatically
+          const { data, error } = await supabase.auth.getSession();
+          if (error) throw error;
+          if (!data.session) throw new Error("No session found");
+        }
+
         navigate("/dashboard");
       } catch (err) {
         console.error("Auth callback error:", err);
