@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import type { MiddlewareHandler } from "hono";
 import {
   exchangeCodeForSessionToken,
   getOAuthRedirectUrl,
+  authMiddleware,
   deleteSession,
   MOCHA_SESSION_TOKEN_COOKIE_NAME,
 } from "@getmocha/users-service/backend";
@@ -13,44 +13,7 @@ import Stripe from "stripe";
 interface AppEnv extends Env {
   STRIPE_SECRET_KEY: string;
   STRIPE_WEBHOOK_SECRET: string;
-  SUPABASE_JWT_SECRET: string;
 }
-
-// Verifies a Supabase HS256 JWT locally — zero external calls.
-async function verifySupabaseJWT(token: string, secret: string): Promise<{ id: string; email: string } | null> {
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-    const [header, payload, sig] = parts;
-    const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      "raw", encoder.encode(secret),
-      { name: "HMAC", hash: "SHA-256" },
-      false, ["verify"]
-    );
-    const sigBytes = Uint8Array.from(
-      atob(sig.replace(/-/g, "+").replace(/_/g, "/")),
-      (c) => c.charCodeAt(0)
-    );
-    const valid = await crypto.subtle.verify("HMAC", key, sigBytes, encoder.encode(`${header}.${payload}`));
-    if (!valid) return null;
-    const claims = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
-    if (claims.exp < Date.now() / 1000) return null;
-    return { id: claims.sub as string, email: claims.email as string };
-  } catch {
-    return null;
-  }
-}
-
-// Fast local auth middleware — replaces the Mocha external-call middleware for data routes.
-const supabaseAuth: MiddlewareHandler<{ Bindings: AppEnv; Variables: { user: { id: string; email: string } } }> = async (c, next) => {
-  const header = c.req.header("Authorization");
-  if (!header?.startsWith("Bearer ")) return c.json({ error: "Unauthorized" }, 401);
-  const user = await verifySupabaseJWT(header.slice(7), c.env.SUPABASE_JWT_SECRET);
-  if (!user) return c.json({ error: "Unauthorized" }, 401);
-  c.set("user", user);
-  await next();
-};
 
 // Pricing plans configuration
 // NOTE: Create these products in Stripe Dashboard and add the Price IDs below
@@ -136,13 +99,13 @@ app.post("/api/sessions", async (c) => {
 });
 
 // Get the current user object for the frontend
-app.get("/api/users/me", supabaseAuth, async (c) => {
+app.get("/api/users/me", authMiddleware, async (c) => {
   return c.json(c.get("user"));
 });
 
 // Get user's licenses
 // Single endpoint returns licenses + stats — avoids two auth round-trips.
-app.get("/api/dashboard", supabaseAuth, async (c) => {
+app.get("/api/dashboard", authMiddleware, async (c) => {
   const user = c.get("user");
 
   const { results: licenses } = await c.env.DB.prepare(
@@ -166,7 +129,7 @@ app.get("/api/dashboard", supabaseAuth, async (c) => {
 });
 
 // Keep individual endpoints for backwards compat
-app.get("/api/licenses", supabaseAuth, async (c) => {
+app.get("/api/licenses", authMiddleware, async (c) => {
   const user = c.get("user");
   const { results } = await c.env.DB.prepare(
     "SELECT * FROM licenses WHERE user_id = ? ORDER BY created_at DESC"
@@ -177,7 +140,7 @@ app.get("/api/licenses", supabaseAuth, async (c) => {
 });
 
 // Get single license by ID
-app.get("/api/licenses/:id", supabaseAuth, async (c) => {
+app.get("/api/licenses/:id", authMiddleware, async (c) => {
   const user = c.get("user");
   const licenseId = c.req.param("id");
   
@@ -195,7 +158,7 @@ app.get("/api/licenses/:id", supabaseAuth, async (c) => {
 });
 
 // Reset hardware lock for a license
-app.post("/api/licenses/:id/reset-hardware", supabaseAuth, async (c) => {
+app.post("/api/licenses/:id/reset-hardware", authMiddleware, async (c) => {
   const user = c.get("user");
   const licenseId = c.req.param("id");
   
@@ -219,7 +182,7 @@ app.post("/api/licenses/:id/reset-hardware", supabaseAuth, async (c) => {
 });
 
 // Create a new license (for demo/testing)
-app.post("/api/licenses", supabaseAuth, async (c) => {
+app.post("/api/licenses", authMiddleware, async (c) => {
   const user = c.get("user");
   const body = await c.req.json();
   
@@ -237,7 +200,7 @@ app.post("/api/licenses", supabaseAuth, async (c) => {
 });
 
 // Create Stripe checkout session
-app.post("/api/checkout", supabaseAuth, async (c) => {
+app.post("/api/checkout", authMiddleware, async (c) => {
   const user = c.get("user");
   const { plan } = await c.req.json();
   
