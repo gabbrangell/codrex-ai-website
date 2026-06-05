@@ -273,6 +273,15 @@ export default function DownloadPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm flex-shrink-0">
+                      4
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">First launch — bypass Gatekeeper</p>
+                      <p className="text-sm text-muted-foreground">macOS may show a security warning. Right-click (or Ctrl+click) Codrex AI in Applications → <strong>Open</strong> → click <strong>Open</strong> in the dialog. You only need to do this once.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 flex-shrink-0">
                       <CheckCircle2 className="h-4 w-4" />
                     </div>
