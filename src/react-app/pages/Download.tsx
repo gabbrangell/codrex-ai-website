@@ -35,10 +35,10 @@ const platformData = {
   macos: {
     name: "macOS",
     icon: Apple,
-    version: "1.0.5",
+    version: "1.0.8",
     size: "~18 MB",
-    filename: "CodrexAI-1.0.5-mac.dmg",
-    downloadUrl: `${STORAGE}/CodrexAI-1.0.5-mac.dmg`,
+    filename: "CodrexAI-1.0.8-mac.dmg",
+    downloadUrl: `${STORAGE}/CodrexAI-1.0.8-mac.dmg`,
     requirements: [
       { icon: Cpu, text: "Apple Silicon or Intel Mac" },
       { icon: Monitor, text: "macOS 12.0 Monterey or later" },
@@ -49,10 +49,10 @@ const platformData = {
   windows: {
     name: "Windows",
     icon: WindowsIcon,
-    version: "1.0.5",
+    version: "1.0.8",
     size: "~90 MB",
-    filename: "CodrexAI-1.0.5-win.exe",
-    downloadUrl: `${STORAGE}/CodrexAI-1.0.5-win.exe`,
+    filename: "CodrexAI-1.0.8-win.exe",
+    downloadUrl: `${STORAGE}/CodrexAI-1.0.8-win.exe`,
     requirements: [
       { icon: Cpu, text: "64-bit processor" },
       { icon: Monitor, text: "Windows 10/11 (64-bit)" },
