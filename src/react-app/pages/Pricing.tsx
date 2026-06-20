@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router";
 import Header from "@/react-app/components/Header";
 import Footer from "@/react-app/components/Footer";
@@ -23,6 +22,7 @@ const plans = [
     description: "Flexible, cancel anytime",
     icon: Star,
     color: "from-slate-700 to-slate-600",
+    stripeUrl: "https://buy.stripe.com/aFabJ0eHf8H55Gs18XfrW03",
     features: [
       { text: "Unlimited mock interviews", included: true },
       { text: "Real-time coaching overlay", included: true },
@@ -41,6 +41,7 @@ const plans = [
     icon: Sparkles,
     color: "from-primary to-cyan-400",
     popular: true,
+    stripeUrl: "https://buy.stripe.com/fZu9AS9mV5uT3ykdVJfrW04",
     features: [
       { text: "Everything in Monthly", included: true },
       { text: "Billed every 3 months", included: true },
@@ -58,6 +59,7 @@ const plans = [
     description: "Best value — save ~$209 compared to monthly billing",
     icon: Crown,
     color: "from-slate-700 to-slate-600",
+    stripeUrl: "https://buy.stripe.com/4gMaEW0Qp1eDecYaJxfrW05",
     features: [
       { text: "Everything in Monthly", included: true },
       { text: "Billed annually", included: true },
@@ -69,32 +71,13 @@ const plans = [
   },
 ];
 
-const BACKEND = "https://codrex-ai-production.up.railway.app";
-
 export default function PricingPage() {
   const [searchParams] = useSearchParams();
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const paymentCancelled = searchParams.get("payment") === "cancelled";
 
-  const handlePurchase = async (planId: string) => {
-    setLoadingPlan(planId);
-    try {
-      const res = await fetch(`${BACKEND}/stripe/create-checkout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
-      });
-
-      const data = await res.json();
-      if (data.url && data.url.startsWith("https://checkout.stripe.com")) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error("Failed to create checkout session:", error);
-    } finally {
-      setLoadingPlan(null);
-    }
+  const handlePurchase = (stripeUrl: string) => {
+    window.location.href = stripeUrl;
   };
 
   return (
@@ -175,8 +158,7 @@ export default function PricingPage() {
 
                 {/* CTA Button */}
                 <Button
-                  onClick={() => handlePurchase(plan.id)}
-                  disabled={loadingPlan !== null}
+                  onClick={() => handlePurchase(plan.stripeUrl)}
                   className={`w-full h-12 text-base font-medium mb-8 ${
                     plan.popular
                       ? "bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90"
@@ -184,11 +166,7 @@ export default function PricingPage() {
                   }`}
                   variant={plan.popular ? "default" : "outline"}
                 >
-                  {loadingPlan === plan.id ? (
-                    <div className="h-5 w-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>Get {plan.name}</>
-                  )}
+                  Get {plan.name}
                 </Button>
 
                 {/* Features */}
