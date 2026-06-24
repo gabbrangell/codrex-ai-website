@@ -16,7 +16,12 @@ import {
   Cpu,
   MemoryStick,
   Info,
+  AlertCircle,
+  Clock,
 } from "lucide-react";
+
+// Set to true when you have the Windows certificate and are ready to release Windows
+const WINDOWS_AVAILABLE = false;
 
 // Windows icon SVG component
 function WindowsIcon({ className }: { className?: string }) {
@@ -162,11 +167,26 @@ export default function DownloadPage() {
             </button>
           </div>
 
+          {/* Windows Coming Soon Banner */}
+          {selectedPlatform === "windows" && !WINDOWS_AVAILABLE && (
+            <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 flex items-start gap-4">
+              <Clock className="h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-amber-950 dark:text-amber-100 mb-1">
+                  Windows Coming Soon
+                </h3>
+                <p className="text-sm text-amber-900/80 dark:text-amber-200/80">
+                  We're working on the Windows version and will release it soon. For now, download the macOS version or check back later!
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Download Card */}
           <div className="relative p-8 rounded-3xl bg-gradient-to-br from-card to-card/50 border border-border/50 mb-12 overflow-hidden">
             {/* Glow effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-cyan-500/5 pointer-events-none" />
-            
+
             <div className="relative flex flex-col md:flex-row items-center gap-8">
               {/* App Logo */}
               <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-primary to-cyan-400 shadow-lg shadow-primary/25">
@@ -187,14 +207,25 @@ export default function DownloadPage() {
                 </div>
               </div>
 
-              <Button
-                onClick={handleDownload}
-                size="lg"
-                className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
-              >
-                <Download className="h-5 w-5 mr-2" />
-                Download for {platform.name}
-              </Button>
+              {selectedPlatform === "windows" && !WINDOWS_AVAILABLE ? (
+                <Button
+                  disabled
+                  size="lg"
+                  className="h-14 px-8 text-lg"
+                >
+                  <Clock className="h-5 w-5 mr-2" />
+                  Coming Soon
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-cyan-400 hover:opacity-90 shadow-lg shadow-primary/25"
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Download for {platform.name}
+                </Button>
+              )}
             </div>
           </div>
 
@@ -238,12 +269,13 @@ export default function DownloadPage() {
           </div>
 
           {/* Installation Steps */}
-          <div className="p-8 rounded-3xl bg-card border border-border/50">
-            <h3 className="text-xl font-semibold text-foreground mb-6">
-              Installation Guide
-            </h3>
-            <div className="space-y-4">
-              {selectedPlatform === "macos" ? (
+          {!(selectedPlatform === "windows" && !WINDOWS_AVAILABLE) && (
+            <div className="p-8 rounded-3xl bg-card border border-border/50">
+              <h3 className="text-xl font-semibold text-foreground mb-6">
+                Installation Guide
+              </h3>
+              <div className="space-y-4">
+                {selectedPlatform === "macos" ? (
                 <>
                   <div className="flex items-start gap-4">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm flex-shrink-0">
@@ -331,8 +363,9 @@ export default function DownloadPage() {
                   </div>
                 </>
               )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Help Link */}
           <div className="mt-8 text-center">
