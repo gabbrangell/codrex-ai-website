@@ -16,7 +16,6 @@ import {
   Cpu,
   MemoryStick,
   Info,
-  AlertCircle,
   Clock,
 } from "lucide-react";
 
