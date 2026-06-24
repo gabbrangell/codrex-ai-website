@@ -12,11 +12,7 @@ export default defineConfig(async () => {
     const { cloudflare } = await import("@cloudflare/vite-plugin");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     plugins.unshift(...mochaPlugins(process.env as any));
-    plugins.push(
-      cloudflare({
-        auxiliaryWorkers: [{ configPath: "/mocha/emails-service/wrangler.json" }],
-      })
-    );
+    plugins.push(cloudflare());
   }
 
   return {
